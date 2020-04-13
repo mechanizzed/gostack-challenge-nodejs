@@ -34,7 +34,7 @@ app.put("/repositories/:id", (request, response) => {
 
   const getIndex = repositories.findIndex((repository) => repository.id === id);
 
-  if (getIndex <= 0) {
+  if (getIndex === -1) {
     return response.status(400).json({ error: "Repository not find" });
   }
 
@@ -52,11 +52,29 @@ app.put("/repositories/:id", (request, response) => {
 });
 
 app.delete("/repositories/:id", (request, response) => {
-  // TODO
+  const { id } = request.params;
+  const getIndex = repositories.findIndex((repository) => repository.id === id);
+
+  if (getIndex === -1) {
+    return response.status(400).json({ error: "Repository not find" });
+  }
+
+  repositories.splice(getIndex, 1);
+
+  return response.status(204).send();
 });
 
 app.post("/repositories/:id/like", (request, response) => {
-  // TODO
+  const { id } = request.params;
+
+  const getIndex = repositories.findIndex((repository) => repository.id === id);
+
+  if (getIndex === -1) {
+    return response.status(400).json({ error: "Repository not find" });
+  }
+
+  repositories[getIndex].likes += 1;
+  return response.json(repositories[getIndex]);
 });
 
 module.exports = app;
