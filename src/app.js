@@ -29,7 +29,26 @@ app.post("/repositories", (request, response) => {
 });
 
 app.put("/repositories/:id", (request, response) => {
-  // TODO
+  const { id } = request.params;
+  const { title, url, techs } = request.body;
+
+  const getIndex = repositories.findIndex((repository) => repository.id === id);
+
+  if (getIndex <= 0) {
+    return response.status(400).json({ error: "Repository not find" });
+  }
+
+  const repository = {
+    id,
+    title,
+    url,
+    techs,
+    likes: repositories[getIndex].likes,
+  };
+
+  repositories[getIndex] = repository;
+
+  return response.json(repository);
 });
 
 app.delete("/repositories/:id", (request, response) => {
